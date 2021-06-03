@@ -17,21 +17,19 @@ app.get('/message', function(req,res){
 });
 
 app.post('/message', function(req,res){
-    res.status(201).send({error:'',message:'Creado correctamente'});
+    if(req.query.error == "ok"){
+        response.error(req, res, 'Error simulado', 500, 'Es solo una simulación de los errores');
+    }
+    else{
+    response.success(req, res, 'Creado correctamente', 201);
+    }
 });
 
 app.delete('/message', function(req,res){
     console.log(req.query);
-    if(req.query.error == "ok"){
-        response.error(req, res, 'Error simulado', 400);
-    }
-    response.success(req, res, 'Creado correctamente', 201);
+    response.success(req, res, 'borrado correctamente', 201);
 });
 
-
-// app.use('/', function(req, res){
-//     res.send('Hola');
-// });
 
 app.listen(3000);
 console.log('La aplicación está escuchando en http://localhost:3000');
