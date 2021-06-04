@@ -1,5 +1,11 @@
 
-const list = [];
+//mock
+// const list = [];
+
+const db = require('mongoose');
+
+//mongo "mongodb+srv://cluster0.k7bnf.mongodb.net/myFirstDatabase" --username user
+
 
 function addMessage(message) {
     list.push(message);
