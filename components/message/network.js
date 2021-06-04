@@ -28,4 +28,17 @@ router.delete('/', function(req,res){
     response.success(req, res, 'borrado correctamente', 201);
 });
 
+router.patch('/:id', function(req,res){
+    //console.log(req.params.id); //obtener id
+    console.log(req.params.id, req.body.message);
+    controller.updateMessage(req.params.id, req.body.message)
+    
+        .then((data) => {
+            response.success(req,res, data, 200);
+        })
+        .catch((e) => {
+            response.error(req, res, 'Error Interno', 500);
+        })
+})
+
 module.exports = router;
