@@ -1,16 +1,5 @@
-const db = require('mongoose');
+
 const Model = require('./model');
-
-db.Promise = global.Promise;
-
-//mongodb+srv://user:1234@cluster0.k7bnf.mongodb.net/telegram?retryWrites=true&w=majority
-db.connect('mongodb+srv://user:1234@cluster0.k7bnf.mongodb.net/telegram?retryWrites=true&w=majority',{
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})//conexion a mongo db
-
-console.log('[db] Conectada con éxito');
-
 
 function addMessage(message) {
     const myMessage = new Model(message);

@@ -1,11 +1,13 @@
 const express = require('express');
 
-//const router = require('./components/message/network');
+const db = require('./db');
+
 const router = require('./network/routes');
+
+db('mongodb+srv://user:1234@cluster0.k7bnf.mongodb.net/telegram?retryWrites=true&w=majority');
 
 var app = express();
 app.use(express.json());
-// app.use(router); // se anula debido a que router está en network.js
 router(app);
 
 
