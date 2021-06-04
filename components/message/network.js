@@ -4,8 +4,8 @@ const controller = require('./controller');
 const response = require('../../network/response');
 
 router.get('/', function(req,res){
-
-    controller.getMessages()
+    const filterMessages = req.query.user || null;
+    controller.getMessages(filterMessages)
         .then((messageList) => {
             response.success(req, res, messageList, 200);
         })
@@ -23,9 +23,15 @@ router.post('/', function(req,res){
     });
 });
 
-router.delete('/', function(req,res){
-    console.log(req.query);
-    response.success(req, res, 'borrado correctamente', 201);
+router.delete('/:id', function(req,res){
+    controller.deleteMessage(req.params.id)
+        .then(() => {
+             response.success(req, res,`Id ${req.params.id} eliminado`, 200);
+        })
+        .catch(e => {
+            response.error(req, res, 'Error Interno', 400, e);
+        })
+   
 });
 
 router.patch('/:id', function(req,res){
