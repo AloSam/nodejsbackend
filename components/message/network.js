@@ -1,10 +1,18 @@
 const express = require('express');
+const multer = require('multer');
+
+const config = require('../../config')
+
 const router = express.Router();
 const controller = require('./controller');
 const response = require('../../network/response');
 
+const upload = multer({
+    dest: 'public/'+config.filesRoute+'/'
+})
+
 router.get('/', function(req,res){
-    const filterMessages = req.query.user || null;
+    const filterMessages = req.query.chat || null;
     controller.getMessages(filterMessages)
         .then((messageList) => {
             response.success(req, res, messageList, 200);
@@ -14,9 +22,10 @@ router.get('/', function(req,res){
         })
 });
 
-router.post('/', function(req,res){
+router.post('/', upload.single('file'), function(req,res){
 
-    controller.addMessage(req.body.user, req.body.message)
+    console.log(req.file);
+    controller.addMessage(req.body.user, req.body.message,req.body.chat, req.file)
     .then((fullMessage) => {response.success(req, res, fullMessage, 201)})
     .catch(e => {
         response.error(req, res, 'Información inválida', 400, 'Error en el controlador')

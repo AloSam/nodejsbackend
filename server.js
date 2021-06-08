@@ -1,17 +1,30 @@
+//npm i express socket.io
+
 const express = require('express');
+var app = express();
+const server = require('http').Server(app);
 
+const config = require('./config');
+
+const cors = require('cors'); //para manejo de cabeceras
+const socket = require('./socket');
 const db = require('./db');
-
 const router = require('./network/routes');
 
-db('mongodb+srv://user:1234@cluster0.k7bnf.mongodb.net/telegram?retryWrites=true&w=majority');
+db(config.dbUrl);
 
-var app = express();
+app.use(cors);
+
 app.use(express.json());
+app.use(express.urlencoded({extended: false}));
+
+socket.connect(server);
+
 router(app);
 
+app.use(config.publicRoute, express.static('public'));
 
-app.use('/app', express.static('public')); // carpeta para objetos
 
-app.listen(3000);
-console.log('La aplicación está escuchando en http://localhost:3000');
+server.listen(config.port, function(){
+    console.log('La aplicación está escuchando en '+ config.host+':'+config.port);
+});

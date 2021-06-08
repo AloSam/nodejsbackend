@@ -1,27 +1,40 @@
 //se va a encargar de todo lo que sucede
-const store = require('./store')
+const socket  = require('../../socket').socket;
+const store = require('./store');
+const config = require('../../config');
 
-function addMessage(user, message){
+function addMessage(user, message, chat, file){
     return new Promise((resolve,reject) => {
-        if(!user || !message){
+        if(!user || !message || !chat){
             console.error('[messageController] No hay usuario o mensaje');
             reject('Los datos son incorrectos');
         }
+
+        let fileUrl = ''
+        if(file)
+        {
+            fileUrl = config.host+':'+config.port+ config.publicRoute+'/'+config.filesRoute+'/';
+        }
+
         const fullMessage = {
+            chat: chat,
             user: user,
             message: message,
-            date: new Date()
+            date: new Date(),
+            file: fileUrl,
         }
         store.add(fullMessage);
+
+        socket.io.emit('message', fullMessage);
 
         resolve(fullMessage);
     })
     
 }
 
-function getMessages(filterUser){
+function getMessages(filterChat){
     return new Promise((resolve, reject) => {
-        resolve(store.list(filterUser));
+        resolve(store.list(filterChat));
     })
 }
 
